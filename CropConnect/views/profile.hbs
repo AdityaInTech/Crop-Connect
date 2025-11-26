@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{user.name}}'s Profile | FarmConnect</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    {{!-- integrity="sha512-3h8eEOL6gZkqQ7szZrC0H8vN0dC5gV6xFzMZ3bCZqvEcyU2qM3qO7Gtx0z7j3+zKTRwP8u+F1EdMfQihjTiK5Q=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" --}}/>
+  <style>
+    body {
+      background-color: #f3f9f3;
+      font-family: 'Poppins', sans-serif;
+      color: #333;
+    }
+
+    .profile-header {
+      background-color: #198754;
+      color: #fff;
+      text-align: center;
+      padding: 45px 0;
+      border-radius: 0 0 25px 25px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .profile-header h2 {
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .logout-btn {
+      background-color: #dc3545;
+      border: none;
+      color: #fff;
+      border-radius: 25px;
+      padding: 8px 20px;
+      margin-top: 10px;
+      transition: 0.3s;
+      font-size: 15px;
+    }
+
+    .logout-btn:hover {
+      background-color: #b02a37;
+    }
+
+    .section-title {
+      text-align: center;
+      font-weight: 600;
+      color: #198754;
+      margin-top: 40px;
+      margin-bottom: 30px;
+    }
+
+    .data-block {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 20px 25px;
+      margin-bottom: 30px;
+      border-left: 6px solid #198754;
+    }
+
+    .data-block table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .data-block th {
+      width: 30%;
+      color: #198754;
+      font-weight: 600;
+      text-align: left;
+      /* <-- LEFT aligned */
+      padding: 10px 15px;
+      border-bottom: 1px solid #dee2e6;
+      vertical-align: top;
+    }
+
+    .data-block td {
+      padding: 10px 15px;
+      border-bottom: 1px solid #dee2e6;
+      color: #555;
+    }
+
+    .data-block img {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      border-radius: 10px;
+      border: 2px solid #e6e6e6;
+      transition: 0.3s;
+    }
+
+    .data-block img:hover {
+      transform: scale(1.05);
+      border-color: #198754;
+    }
+
+    .delete-btn {
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .delete-btn:hover {
+      background-color: #b02a37;
+    }
+
+    .no-data {
+      text-align: center;
+      font-style: italic;
+      color: #777;
+      margin-top: 30px;
+    }
+
+    hr {
+      border-top: 2px dashed #cce3cc;
+      margin: 30px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  {{> navbar data=details}}
+
+  <!-- Profile Header -->
+  <div class="profile-header">
+    <h2>{{user.name}}</h2>
+    <p>{{user.email}}</p>
+    <a href="/logout" class="logout-btn">Logout</a>
+  </div>
+
+  <!-- Sell History Section -->
+  <div class="container mt-5 mb-5">
+    <h3 class="section-title">Your Sell History</h3>
+
+    {{#if history.length}}
+    {{#each history}}
+    <div class="data-block">
+      <table class="table table-borderless align-middle">
+        <tr>
+          <th>Crop Name</th>
+          <td>{{this.crop_name}}</td>
+        </tr>
+        <tr>
+          <th>Crop Variety</th>
+          <td>{{this.crop_variety}}</td>
+        </tr>
+        <tr>
+          <th>Quantity</th>
+          <td>{{this.quantity}} kg</td>
+        </tr>
+        <tr>
+          <th>Price</th>
+          <td>₹{{this.price}}</td>
+        </tr>
+        <tr>
+          <th>Condition</th>
+          <td>{{this.condition}}</td>
+        </tr>
+        <tr>
+          <th>Harvest Date</th>
+          <td>
+            <script>
+              document.write(new Date('{{this.harvest_date}}').toLocaleDateString('en-IN', {
+                year: 'numeric', month: 'short', day: 'numeric'
+              }));
+            </script>
+          </td>
+        </tr>
+        <tr>
+          <th>Location</th>
+          <td>{{this.location}}, {{this.state}}, {{this.country}}</td>
+        </tr>
+        <tr>
+          <th>Negotiable</th>
+          <td>{{#if this.negotiable}}Yes{{else}}No{{/if}}</td>
+        </tr>
+        <tr>
+          <th>Description</th>
+          <td>{{this.description}}</td>
+        </tr>
+        <tr>
+          <th>Owner Name</th>
+          <td>{{this.owner_name}}</td>
+        </tr>
+        <tr>
+          <th>Owner Contact</th>
+          <td>{{this.owner_contact}}</td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td>{{this.email}}</td>
+        </tr>
+        <tr>
+          <th>Form Created</th>
+          <td>
+            <script>
+              document.write(new Date('{{this.createdAt}}').toLocaleDateString('en-IN', {
+                year: 'numeric', month: 'short', day: 'numeric'
+              }));
+            </script>
+          </td>
+        </tr>
+
+        {{#if this.image}}
+        <tr>
+          <th>Crop Image</th>
+          <td>
+            <img src="{{this.image}}" alt="{{this.crop_name}}" />
+          </td>
+        </tr>
+        {{/if}}
+      </table>
+
+      <div class="text-end mt-3">
+        <a href="/delete-sell/{{this._id}}" class="delete-btn"
+          onclick="return confirm('Are you sure you want to delete this entry?');">
+          Delete Entry
+        </a>
+      </div>
+    </div>
+    {{/each}}
+    {{else}}
+    <p class="no-data">No sell data found.</p>
+    {{/if}}
+  </div>
+
+  {{> footer}}
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

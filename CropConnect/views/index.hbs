@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CropConnect</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  {{!-- FontAwesome cdn --}}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="/static/css/style.css">
+  <style>
+    body {
+            background-color: #f5fff5;
+            font-family: 'Poppins', sans-serif;
+        }
+  </style>
+</head>
+
+<body>
+  {{>navbar data=details}}
+  {{!-- <h1>Dynamic Website</h1> --}}
+  {{!-- {{details}} --}}
+  {{>slider slides=slides}}
+  {{!-- {{>services services=services}} --}}
+
+  {{!-- services section --}}
+
+  <section id="services_section" class="py-4 bg-light">
+    <div class="container">
+      <h1 class="text-center">Our Services</h1>
+
+      <div class="row mt-5">
+        {{#each services}}
+        <div class="col-md-4">
+          <div class="card">
+            <div class="card-body">
+
+              <div class="container text-center py-1">
+                {{!-- <i class="fa-brands fa-pied-piper-hat service_icon"></i> --}}
+              </div>
+              <h3 class="card=title">{{this.title}}</h3>
+              <p>{{this.description}}</p>
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </section>
+
+  {{!-- {{#if services}}
+  <section id="services_section" class="py-4 bg-light">
+    <div class="container">
+      <h1 class="text-center">Our Services</h1>
+      <div class="row mt-5">
+        {{#each services}}
+        <div class="col-md-4">
+          <div class="card mb-3">
+            <div class="card-body text-center">
+              <h3 class="card-title">{{this.title}}</h3>
+              <p>{{this.description}}</p>
+              {{#if this.link}}<a href="{{this.link}}" class="btn btn-sm btn-primary">Check</a>{{/if}}
+            </div>
+          </div>
+        </div>
+        {{/each}}
+      </div>
+    </div>
+  </section>
+  {{/if}} --}}
+
+  {{!-- Contact Us Section --}}
+
+  {{!-- <section id ="contact_us" >
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center my-4">
+
+        </div>
+      </div>
+    </div>
+  </section> --}}
+  <section id="contact_section" class="container mt-5 mb-5">
+  <h2 class="text-center mb-4">Contact Us</h2>
+  <p class="text-center mb-4">We’d love to hear you! Please fill the form below and reach us directly.</p>
+
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <form action="/process-contact-form" method="POST">
+        <div class="mb-3">
+          <label for="name" class="form-label">Full Name</label>
+          <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="email" class="form-label">Email Address</label>
+          <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+        </div>
+
+        <div class="mb-3">
+          <label for="message" class="form-label">Message</label>
+          <textarea class="form-control" id="message" name="message" rows="4" placeholder="Write your message here" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-success w-100">Submit</button>
+      </form>
+    </div>
+  </div>
+
+</section>
+
+{{>footer}}
+{{!-- {{#each footer}}
+  {{> footer}}
+{{/each}} --}}
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>
