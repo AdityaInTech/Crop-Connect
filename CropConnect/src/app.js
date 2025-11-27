@@ -282,7 +282,7 @@ hbs.registerHelper('year', () => new Date().getFullYear());
 
 // -------------------- ROUTES --------------------
 
-app.use('', routes);
+app.use('/', routes);
 
 // -------------------- DATABASE --------------------
 
@@ -294,6 +294,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Do NOT use app.listen here for Vercel
 module.exports = app;
+
 
 
 
