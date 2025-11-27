@@ -1,7 +1,7 @@
 # Crop-Connect
 Crop Connect is a simple marketplace where farmers list crops with images and details, and buyers easily browse and connect. Built using Node.js, Express, MongoDB, HBS, and Cloudinary.
 
-## Overview
+# Overview
 Crop Connect bridges the gap between sellers and buyers by offering a clean interface to list crops with detailed information.
 Sellers can upload images, specify pricing, add descriptions, and mark whether pricing is negotiable.
 
