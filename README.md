@@ -115,7 +115,8 @@ saveUninitialized: true
 
 ## Future Enhancements
 - Buyer–Seller chat system  
-- Admin dashboard  
+- Admin dashboard
+- Rating System (help to track trustworthy Sellers)
 - AI-based price prediction  
 - Crop quality prediction model  
 - Mobile App (Flutter / React Native)
