@@ -192,9 +192,18 @@ mongoose.connect(process.env.MONGO_URI)
 // app.listen(process.env.Port | 5556, () => {
 //     console.log("server started")
 // })
+//const port = process.env.PORT || 5556;
+//app.listen(port, () => {
+//   console.log(`server started on ${port}`)
+//})
 const port = process.env.PORT || 5556;
-app.listen(port, () => {
-    console.log(`server started on ${port}`)
-})
+
+if (require.main === module) {
+    app.listen(port, () => {
+        console.log(`server started on ${port}`);
+    });
+}
+
+module.exports = app;
 
 // module.exports = { upload };
