@@ -1,4 +1,4 @@
-require('dotenv').config(); 
+/*require('dotenv').config(); 
 const express = require("express")
 const hbs = require("hbs")
 const path = require("path")
@@ -207,5 +207,98 @@ mongoose.connect(process.env.MONGO_URI)
 module.exports = app;
 
 // module.exports = { upload };
+*/
+
+
+require('dotenv').config();
+const express = require("express");
+const hbs = require("hbs");
+const path = require("path");
+const multer = require('multer');
+const fs = require('fs');
+const cors = require('cors');
+const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const session = require('express-session');
+
+const routes = require('./routes/main');
+const Detail = require('./models/Detail');
+const Slider = require("./models/Slider");
+const Service = require("./models/Service");
+const Footer = require("./models/footer");
+
+const app = express();
+
+// -------------------- MIDDLEWARE --------------------
+
+// Load footer for all pages
+app.use(async (req, res, next) => {
+  try {
+    const footer = await Footer.findOne().lean();
+    res.locals.footer = footer || {};
+    res.locals.year = new Date().getFullYear();
+  } catch (err) {
+    console.error("Error loading footer:", err);
+    res.locals.footer = {};
+    res.locals.year = new Date().getFullYear();
+  }
+  next();
+});
+
+// Session
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true
+}));
+
+// Body parser
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
+
+// -------------------- STATIC FILES & VIEWS --------------------
+
+// Absolute paths for Vercel
+app.use('/static', express.static(path.join(__dirname, '..', 'public')));
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
+
+app.set('view engine', 'hbs');
+app.set('views', path.join(__dirname, '..', 'views'));
+hbs.registerPartials(path.join(__dirname, '..', 'views', 'partials'));
+
+// -------------------- HBS HELPERS --------------------
+
+hbs.registerHelper('inc', v => Number(v) + 1);
+hbs.registerHelper('lower', v => (v || '').toString().toLowerCase());
+hbs.registerHelper('eq', (a, b) => a === b);
+hbs.registerHelper('statusIsSuccess', status => status === "success");
+hbs.registerHelper('formatDate', date => {
+  if (!date) return '';
+  const d = new Date(date);
+  return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+});
+hbs.registerHelper('year', () => new Date().getFullYear());
+
+// -------------------- ROUTES --------------------
+
+app.use('', routes);
+
+// -------------------- DATABASE --------------------
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ Database connected successfully"))
+  .catch(err => console.error("❌ Database connection error:", err));
+
+// -------------------- EXPORT APP --------------------
+
+// Do NOT use app.listen here for Vercel
+module.exports = app;
+
+
+
+
+
+
 
 
