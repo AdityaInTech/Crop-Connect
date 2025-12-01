@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sell Your Crop | FarmConnect</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+        {{!-- integrity="sha512-3h8eEOL6gZkqQ7szZrC0H8vN0dC5gV6xFzMZ3bCZqvEcyU2qM3qO7Gtx0z7j3+zKTRwP8u+F1EdMfQihjTiK5Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"  --}}/>
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f5fff5;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .form-section {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 40px;
+        }
+
+        .form-title {
+            color: #228b22;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .btn-success {
+            background-color: #228b22;
+            border: none;
+        }
+
+        .btn-success:hover {
+            background-color: #1d7a1d;
+        }
+
+        footer {
+            background-color: #228b22;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    {{>navbar data=details}}
+
+    {{#if (eq status "success")}}
+    <div class="alert alert-success text-center mx-3 mt-3" role="alert">
+        ✅ Your crop has been submitted successfully!
+    </div>
+    {{else if (eq status "error")}}
+    <div class="alert alert-danger text-center mx-3 mt-3" role="alert">
+        ❌ There was an error submitting your crop. Please try again.
+    </div>
+    {{/if}}
+
+
+
+    <!-- Sell Form Section -->
+    <div class="container form-section">
+        <h2 class="form-title">Sell Your Crop</h2>
+        <form action="/process-sell-form" method="POST" enctype="multipart/form-data">
+
+            <!-- Owner Details -->
+            <h5 class="text-success mb-3">Owner Details</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Owner Name</label>
+                    <input name="owner_name" type="text" class="form-control" placeholder="Enter your full name"
+                        required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Contact Number</label>
+                    <input name="owner_contact" type="tel" class="form-control" placeholder="+91 XXXXX XXXXX" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Email</label>
+                    <input name="email" type="email" class="form-control" placeholder="Enter email" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Country</label>
+                    <input name="country" type="text" class="form-control" placeholder="Enter Country" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">State</label>
+                    <input name="state" type="text" class="form-control" placeholder="Enter State" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">City / Location</label>
+                    <input name="location" type="text" class="form-control" placeholder="City / Village Name" required>
+                </div>
+
+            </div>
+
+            <hr class="my-4">
+
+            <!-- Crop Details -->
+            <h5 class="text-success mb-3">Crop Details</h5>
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Crop Type / Name</label>
+                    <input name="crop_name" type="text" class="form-control" placeholder="e.g. Wheat, Rice, Maize"
+                        required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Crop Variety</label>
+                    <input name="crop_variety" type="text" class="form-control" placeholder="e.g. Basmati, Hybrid Maize"
+                        required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Quantity Available (in kg)</label>
+                    <input name="quantity" type="number" class="form-control" placeholder="e.g. 200" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Price per Unit (₹/kg)</label>
+                    <input name="price" type="number" class="form-control" placeholder="e.g. 25" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Condition / Quality</label>
+                    <select class="form-select" name="condition" required>
+                        <option value="">Select Condition</option>
+                        <option>Fresh</option>
+                        <option>Dried</option>
+                        <option>Organic</option>
+                        <option>Other</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Harvest Date</label>
+                    <input type="date" class="form-control" name="harvest_date" required>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <!-- Image Upload -->
+            <h5 class="text-success mb-3">Crop Image</h5>
+            <div class="mb-3">
+                <input type="file" class="form-control" name="image" accept="image/*" required>
+                <small class="text-muted">Upload a clear image of your crop</small>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+                <label class="form-label">Short Description</label>
+                <textarea class="form-control" rows="3" name="description"
+                    placeholder="Write about your crop condition, freshness, etc."></textarea>
+            </div>
+
+            <div class="mb-3 form-check">
+                <input type="checkbox" class="form-check-input" name="negotiable">
+                <label class="form-check-label">Price is negotiable</label>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-success px-4">Submit Crop</button>
+                <button type="reset" class="btn btn-outline-success ms-2 px-4">Reset</button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script>
+        setTimeout(() => {
+            const alertBox = document.querySelector('.alert');
+            if (alertBox) alertBox.style.display = 'none';
+        }, 4000);
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    {{> footer}}
+
+</body>
+
+</html>
