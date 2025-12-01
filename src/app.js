@@ -82,9 +82,13 @@ hbs.registerHelper('formatDate', function(date) {
 hbs.registerHelper('year', () => new Date().getFullYear());
 
 
-app.set('view engine', 'hbs')
-app.set('views', 'views')
-hbs.registerPartials('views/partials')
+app.set("view engine", "hbs");
+app.set("views", path.join(__dirname, "..", "views"));
+hbs.registerPartials(path.join(__dirname, "..", "views", "partials"));
+//original
+//app.set('view engine', 'hbs')
+//app.set('views', 'views')
+//hbs.registerPartials('views/partials')
 // app.set('view engine', 'hbs')
 // app.set("views", path.join(__dirname,'..', 'views'))
 // hbs.registerPartials(path.join(__dirname,'..', 'views', 'partials'))
