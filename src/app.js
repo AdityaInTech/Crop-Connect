@@ -42,8 +42,9 @@ app.use(session({
 app.use(express.json()) 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors())
-app.use('/static', express.static('public'))
-// app.use('/static', express.static(path.join(__dirname, '..','public')))
+app.use('/static', express.static(path.join(__dirname, '..', 'public')));
+//original
+//app.use('/static', express.static('public'))
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 // app.use('', routes)
 
