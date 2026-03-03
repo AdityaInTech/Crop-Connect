@@ -270,35 +270,42 @@ routes.get("/contact-us", async (req, res) => {
 
 
 
-routes.post("/process-sell-form", upload.single("image"), async (req, res) => {
+routes.post("/process-sell-form", async (req, res) => {
     console.log("Form Submitted")
     try {
         if (!req.session.userId) {
           return res.redirect("/login");
         }
         
-        const formData = req.body || {};
-        formData.negotiable = req.body.negotiable ? true : false;
-        formData.userId = req.session.userId;
+        // Execute dynamic upload call assigned by App
+        req.upload.single('image')(req, res, async function(err) {
+            if(err){
+                 console.log("Multer error:", err)
+                 return res.redirect("/sell")
+            }
 
-        if (req.file) {
-             formData.image = '/uploads/' + req.file.filename; 
-        }
+            const formData = req.body || {};
+            formData.negotiable = req.body.negotiable ? true : false;
+            formData.userId = req.session.userId;
 
-        const data = await Sell_form.create(formData);
-        console.log(data)
+            if (req.file) {
+                 formData.image = '/uploads/' + req.file.filename; 
+            }
 
-        if (req.file) {
-          await Slider.create({
-            title: formData.crop_name || "Farmer Product",
-            subTitle: `${formData.owner_name || 'User'} posted a new crop!`,
-            imageUrl: formData.image, 
-            uploadedBy: req.session.userId
-          });
-          console.log("Image added to slider");
-        }
-        res.redirect("/sell?status=success");
-        
+            const data = await Sell_form.create(formData);
+            console.log(data)
+
+            if (req.file) {
+              await Slider.create({
+                title: formData.crop_name || "Farmer Product",
+                subTitle: `${formData.owner_name || 'User'} posted a new crop!`,
+                imageUrl: formData.image, 
+                uploadedBy: req.session.userId
+              });
+              console.log("Image added to slider");
+            }
+            res.redirect("/sell?status=success");
+        })
     }
     catch (error) {
         console.log(error)
