@@ -18,7 +18,7 @@ const Footer= require("../models/footer")
 
 
 // Import upload configured with Cloudinary
-//const { upload } = require('../config/cloudinary');
+const { upload } = require('../config/cloudinary');
 
 
 
@@ -217,12 +217,12 @@ routes.get("/contact-us", async (req, res) => {
     })
 })
 
-routes.post("/process-sell-form", upload.single("image"), async (req, res) => {
-    console.log("Form Submitted")
-    try {
-        if (!req.session.userId) {
-          return res.redirect("/login");
-        }
+//routes.post("/process-sell-form", upload.single("image"), async (req, res) => {
+//    console.log("Form Submitted")
+//    try {
+//        if (!req.session.userId) {
+//          return res.redirect("/login");
+//        }
         // Use Multer to handle single image file
         // req.upload.single('image')(req, res, async function(err) {
         // if(err){
@@ -234,34 +234,85 @@ routes.post("/process-sell-form", upload.single("image"), async (req, res) => {
         // if(req.file){
         //     formData.image = '/uploads/' + req.file.filename; // save path in DB
         // }
-        const formData = req.body || {};
-        formData.negotiable = req.body.negotiable ? true : false; // Handle checkbox
+//        const formData = req.body || {};
+//        formData.negotiable = req.body.negotiable ? true : false; // Handle checkbox
         //  Attach user ID
-        formData.userId = req.session.userId; //  link to logged-in user
+//        formData.userId = req.session.userId; //  link to logged-in user
          //  If an image is uploaded via Cloudinary, save its URL in DB
-        if (req.file) {
-            formData.image = req.file.path; // Cloudinary URL
+//        if (req.file) {
+//            formData.image = req.file.path; // Cloudinary URL
+//        }
+//        const data = await Sell_form.create(formData);
+//        console.log(data)
+        //  Automatically add image to Slider (Cloudinary URL)
+//        if (req.file) {
+//          await Slider.create({
+//            title: formData.crop_name || "Farmer Product",
+//            subTitle: `${formData.owner_name || 'User'} posted a new crop!`,
+//            imageUrl: req.file.path,
+//            uploadedBy: req.session.userId
+//          });
+//          console.log("Image added to slider");
+//        }
+//        res.redirect("/sell?status=success");
+        // })
+//    }
+//    catch (error) {
+//        console.log(error)
+//        res.redirect("/sell?status=error");
+//    }
+//})
+
+
+
+
+
+
+
+
+routes.post("/process-sell-form", upload.single("image"), async (req, res) => {
+    console.log("Form Submitted")
+    try {
+        if (!req.session.userId) {
+          return res.redirect("/login");
         }
+        
+        const formData = req.body || {};
+        formData.negotiable = req.body.negotiable ? true : false;
+        formData.userId = req.session.userId;
+
+        if (req.file) {
+             formData.image = '/uploads/' + req.file.filename; 
+        }
+
         const data = await Sell_form.create(formData);
         console.log(data)
-        //  Automatically add image to Slider (Cloudinary URL)
+
         if (req.file) {
           await Slider.create({
             title: formData.crop_name || "Farmer Product",
             subTitle: `${formData.owner_name || 'User'} posted a new crop!`,
-            imageUrl: req.file.path,
+            imageUrl: formData.image, 
             uploadedBy: req.session.userId
           });
           console.log("Image added to slider");
         }
         res.redirect("/sell?status=success");
-        // })
+        
     }
     catch (error) {
         console.log(error)
         res.redirect("/sell?status=error");
     }
 })
+
+
+
+
+
+
+
+
 
 routes.post("/process-contact-form", async (req, res) => {
     console.log("Contact Form Submitted")
