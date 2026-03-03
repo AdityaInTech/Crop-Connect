@@ -317,18 +317,25 @@ routes.get("/contact-us", async (req, res) => {
 
 
 routes.post("/process-sell-form", async (req, res) => {
-    console.log("Form Submitted")
-    try {
-        if (!req.session.userId) {
-          return res.redirect("/login");
+    console.log("--- Form Submission Started ---");
+    
+    if (!req.session.userId) {
+        console.log("Failed: User not logged in");
+        return res.redirect("/login");
+    }
+    
+    // Execute dynamic upload call assigned by App
+    req.upload.single('image')(req, res, async function(err) {
+        if(err){
+             console.log("Multer error:", err);
+             return res.redirect("/sell?status=error");
         }
-        
-        req.upload.single('image')(req, res, async function(err) {
-            if(err){
-                 console.log("Multer error:", err)
-                 return res.redirect("/sell")
-            }
 
+        console.log("Parsed Text Data:", req.body); 
+        console.log("Parsed Image File:", req.file);
+
+        try {
+            // This inner try-catch is crucial! If MongoDB fails, it catches it here.
             const formData = req.body || {};
             formData.negotiable = req.body.negotiable ? true : false;
             formData.userId = req.session.userId;
@@ -337,8 +344,9 @@ routes.post("/process-sell-form", async (req, res) => {
                  formData.image = '/uploads/' + req.file.filename; 
             }
 
+            console.log("Attempting to save to MongoDB...");
             const data = await Sell_form.create(formData);
-            console.log(data)
+            console.log("✅ Successfully saved to DB:", data._id);
 
             if (req.file) {
               await Slider.create({
@@ -347,16 +355,17 @@ routes.post("/process-sell-form", async (req, res) => {
                 imageUrl: formData.image, 
                 uploadedBy: req.session.userId
               });
-              console.log("Image added to slider");
+              console.log("✅ Image added to slider");
             }
-            res.redirect("/sell?status=success");
-        })
-    }
-    catch (error) {
-        console.log(error)
-        res.redirect("/sell?status=error");
-    }
-})
+            
+            return res.redirect("/sell?status=success");
+
+        } catch (dbError) {
+            console.log("❌ Database Error:", dbError.message);
+            return res.redirect("/sell?status=error");
+        }
+    });
+});
 
 
 
