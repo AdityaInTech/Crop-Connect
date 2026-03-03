@@ -13,6 +13,18 @@ const Footer= require("../models/footer")
 // Import upload from app.js
 // const { upload } = require("../app");
 
+
+
+
+
+// Import upload configured with Cloudinary
+const { upload } = require('../config/cloudinary');
+
+
+
+
+
+
 const routes = express.Router()
 
 // Middleware to protect routes 
