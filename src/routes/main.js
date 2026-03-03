@@ -18,7 +18,7 @@ const Footer= require("../models/footer")
 
 
 // Import upload configured with Cloudinary
-const { upload } = require('../config/cloudinary');
+//const { upload } = require('../config/cloudinary');
 
 
 
